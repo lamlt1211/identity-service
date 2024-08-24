@@ -1,5 +1,6 @@
 package com.cancelo.identityservice.controller;
 
+import com.cancelo.identityservice.dto.request.ApiResponse;
 import com.cancelo.identityservice.dto.request.UserCreationRequest;
 import com.cancelo.identityservice.dto.request.UserUpdateRequest;
 import com.cancelo.identityservice.entity.User;
@@ -17,8 +18,10 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    User createUser(@Valid @RequestBody UserCreationRequest request) {
-        return userService.createUser(request);
+    ApiResponse<User> createUser(@Valid @RequestBody UserCreationRequest request) {
+        ApiResponse<User> apiResponse = new ApiResponse<>();
+        apiResponse.setResult(userService.createUser(request));
+        return apiResponse;
     }
 
     @GetMapping
