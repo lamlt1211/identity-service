@@ -11,18 +11,18 @@ import java.time.LocalDate;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private long id;
+    private String id;
     private String username;
     private String password;
     private String firstName;
     private String lastName;
     private LocalDate dob;
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

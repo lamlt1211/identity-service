@@ -3,6 +3,7 @@ package com.cancelo.identityservice.controller;
 import com.cancelo.identityservice.dto.request.ApiResponse;
 import com.cancelo.identityservice.dto.request.UserCreationRequest;
 import com.cancelo.identityservice.dto.request.UserUpdateRequest;
+import com.cancelo.identityservice.dto.response.UserResponse;
 import com.cancelo.identityservice.entity.User;
 import com.cancelo.identityservice.service.UserService;
 import jakarta.validation.Valid;
@@ -30,12 +31,12 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    User getUser(@PathVariable String userId) {
+    UserResponse getUser(@PathVariable String userId) {
         return userService.getUser(userId);
     }
 
     @PutMapping("/{userId}")
-    User updateUser(@PathVariable String userId, @RequestBody UserUpdateRequest request) {
+    UserResponse updateUser(@PathVariable String userId, @RequestBody UserUpdateRequest request) {
         return userService.updateUser(userId, request);
     }
 

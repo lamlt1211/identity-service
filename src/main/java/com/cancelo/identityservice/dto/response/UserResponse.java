@@ -1,6 +1,5 @@
-package com.cancelo.identityservice.dto.request;
+package com.cancelo.identityservice.dto.response;
 
-import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,12 +13,10 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@FieldDefaults(level = AccessLevel.PRIVATE) // mac dinh la private ma khong can khai bao o duoi
-public class UserCreationRequest {
-    @Size(min = 3, message = "USERNAME_INVALID")
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class UserResponse {
+    String id;
     String username;
-
-    @Size(min = 8, message = "INVALID_PASSWORD")
     String password;
     String firstName;
     String lastName;
