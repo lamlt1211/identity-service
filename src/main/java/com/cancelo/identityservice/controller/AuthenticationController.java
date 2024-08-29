@@ -25,6 +25,8 @@ public class AuthenticationController {
 
     AuthenticationService authenticationService;
 
+
+    // gen ra mot token
     @PostMapping("token")
     ApiResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
         var result = authenticationService.authenticate(request);
@@ -33,6 +35,8 @@ public class AuthenticationController {
                 .build();
     }
 
+
+    // verify -  token hop le tra ve true - sai tra ve false
     @PostMapping("introspect")
     ApiResponse<IntrospectResponse> authenticate(@RequestBody IntrospectRequest request)
             throws ParseException, JOSEException {
