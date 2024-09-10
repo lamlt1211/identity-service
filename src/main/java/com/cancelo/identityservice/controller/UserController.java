@@ -29,18 +29,31 @@ public class UserController {
     }
 
     @GetMapping
-    List<User> getAllUsers() {
+    ApiResponse<List<UserResponse>> getUsers() {
         var authencatication = SecurityContextHolder.getContext().getAuthentication();
         log.info("Username: {}", authencatication.getName());
         authencatication.getAuthorities().forEach(grantedAuthority -> log.info(grantedAuthority.getAuthority()));
 
 
-        return userService.getAllUsers();
+        return ApiResponse.<List<UserResponse>>builder()
+                .result(userService.getUsers())
+                .build();
     }
 
     @GetMapping("/{userId}")
-    UserResponse getUser(@PathVariable String userId) {
-        return userService.getUser(userId);
+    ApiResponse<UserResponse> getUser(@PathVariable String userId) {
+
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.getUser(userId))
+                .build();
+    }
+
+    @GetMapping("/{userId}")
+    ApiResponse<UserResponse> getMyInfo() {
+
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.getMyInfo())
+                .build();
     }
 
     @PutMapping("/{userId}")
