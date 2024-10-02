@@ -48,7 +48,7 @@ public class UserController {
                 .build();
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/myInfo")
     ApiResponse<UserResponse> getMyInfo() {
 
         return ApiResponse.<UserResponse>builder()
