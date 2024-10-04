@@ -9,6 +9,7 @@ import com.cancelo.identityservice.enums.Role;
 import com.cancelo.identityservice.exception.AppException;
 import com.cancelo.identityservice.exception.ErrorCode;
 import com.cancelo.identityservice.mapper.UserMapper;
+import com.cancelo.identityservice.repository.RoleRepository;
 import com.cancelo.identityservice.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,8 @@ public class UserService {
     UserMapper userMapper;
 
     PasswordEncoder passwordEncoder;
+
+    RoleRepository roleRepository;
 
     public UserResponse createUser(UserCreationRequest request) {
         // kiem tra user co ton tai hay khong
@@ -66,6 +69,10 @@ public class UserService {
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         userMapper.updateUser(user, request);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        var roles = roleRepository.findAllById(request.getRoles());
+        user.setRoles(new HashSet<>(roles));
         return userMapper.toUserResponse(userRepository.save(user));
     }
 
@@ -74,7 +81,8 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('APPROVE_POST')")
     public List<UserResponse> getUsers() {
         log.info("In method get Users");
         return userRepository.findAll().stream()
