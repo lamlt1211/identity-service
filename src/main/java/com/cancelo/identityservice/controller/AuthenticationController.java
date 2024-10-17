@@ -3,8 +3,10 @@ package com.cancelo.identityservice.controller;
 import com.cancelo.identityservice.dto.request.ApiResponse;
 import com.cancelo.identityservice.dto.request.AuthenticationRequest;
 import com.cancelo.identityservice.dto.request.IntrospectRequest;
+import com.cancelo.identityservice.dto.request.LogoutRequest;
 import com.cancelo.identityservice.dto.response.AuthenticationResponse;
 import com.cancelo.identityservice.dto.response.IntrospectResponse;
+import com.cancelo.identityservice.entity.InvalidatedToken;
 import com.cancelo.identityservice.service.AuthenticationService;
 import com.nimbusds.jose.JOSEException;
 import lombok.AccessLevel;
@@ -46,5 +48,12 @@ public class AuthenticationController {
                 .build();
     }
 
+    @PostMapping("/logout")
+    ApiResponse<Void> logout(@RequestBody LogoutRequest request)
+            throws ParseException, JOSEException {
+        authenticationService.logout(request);
+        return ApiResponse.<Void>builder()
+                .build();
+    }
 
 }
