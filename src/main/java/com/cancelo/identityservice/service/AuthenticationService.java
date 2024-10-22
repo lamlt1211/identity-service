@@ -3,6 +3,7 @@ package com.cancelo.identityservice.service;
 import com.cancelo.identityservice.dto.request.AuthenticationRequest;
 import com.cancelo.identityservice.dto.request.IntrospectRequest;
 import com.cancelo.identityservice.dto.request.LogoutRequest;
+import com.cancelo.identityservice.dto.request.RefreshRequest;
 import com.cancelo.identityservice.dto.response.AuthenticationResponse;
 import com.cancelo.identityservice.dto.response.IntrospectResponse;
 import com.cancelo.identityservice.entity.InvalidatedToken;
@@ -101,6 +102,36 @@ public class AuthenticationService {
                 .build();
 
         invalidatedTokenRepository.save(invalidatedToken);
+
+    }
+
+    public AuthenticationResponse refreshToken(RefreshRequest request) throws ParseException, JOSEException {
+        var signedJWT = verifyToken(request.getToken());
+
+
+        var jit = signedJWT.getJWTClaimsSet().getJWTID();
+
+        var expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
+
+        InvalidatedToken invalidatedToken = InvalidatedToken.builder()
+                .id(jit)
+                .expiryTime(expiryTime)
+                .build();
+
+        invalidatedTokenRepository.save(invalidatedToken);
+
+        var username = signedJWT.getJWTClaimsSet().getSubject();
+
+        var user = userRepository.findByUsername(username).orElseThrow(
+                () -> new AppException(ErrorCode.USER_NOT_EXISTED)
+        );
+
+        var token = generateToken(user);
+
+        return AuthenticationResponse.builder()
+                .token(token)
+                .authenticated(true)
+                .build();
 
     }
 

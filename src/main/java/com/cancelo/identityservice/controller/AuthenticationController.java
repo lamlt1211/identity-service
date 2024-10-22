@@ -4,9 +4,9 @@ import com.cancelo.identityservice.dto.request.ApiResponse;
 import com.cancelo.identityservice.dto.request.AuthenticationRequest;
 import com.cancelo.identityservice.dto.request.IntrospectRequest;
 import com.cancelo.identityservice.dto.request.LogoutRequest;
+import com.cancelo.identityservice.dto.request.RefreshRequest;
 import com.cancelo.identityservice.dto.response.AuthenticationResponse;
 import com.cancelo.identityservice.dto.response.IntrospectResponse;
-import com.cancelo.identityservice.entity.InvalidatedToken;
 import com.cancelo.identityservice.service.AuthenticationService;
 import com.nimbusds.jose.JOSEException;
 import lombok.AccessLevel;
@@ -44,6 +44,15 @@ public class AuthenticationController {
             throws ParseException, JOSEException {
         var result = authenticationService.introspect(request);
         return ApiResponse.<IntrospectResponse>builder()
+                .result(result)
+                .build();
+    }
+
+    @PostMapping("refresh")
+    ApiResponse<AuthenticationResponse> authenticate(@RequestBody RefreshRequest request)
+            throws ParseException, JOSEException {
+        var result = authenticationService.refreshToken(request);
+        return ApiResponse.<AuthenticationResponse>builder()
                 .result(result)
                 .build();
     }
