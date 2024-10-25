@@ -40,6 +40,7 @@ public class UserService {
     RoleRepository roleRepository;
 
     public UserResponse createUser(UserCreationRequest request) {
+        log.info("Service: Create User");
         // kiem tra user co ton tai hay khong
         if (userRepository.existsByUsername(request.getUsername()))
             throw new AppException(ErrorCode.USER_EXISTED);
