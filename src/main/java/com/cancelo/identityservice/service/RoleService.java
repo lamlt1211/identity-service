@@ -1,18 +1,20 @@
 package com.cancelo.identityservice.service;
 
+import java.util.HashSet;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.cancelo.identityservice.dto.request.RoleRequest;
 import com.cancelo.identityservice.dto.response.RoleResponse;
 import com.cancelo.identityservice.mapper.RoleMapper;
 import com.cancelo.identityservice.repository.PermissionRepository;
 import com.cancelo.identityservice.repository.RoleRepository;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
-import java.util.HashSet;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +31,6 @@ public class RoleService {
     public RoleResponse create(RoleRequest request) {
         var role = roleMapper.toRole(request);
 
-
         var permissions = permissionRepository.findAllById(request.getPermissions());
         role.setPermissions(new HashSet<>(permissions));
 
@@ -39,10 +40,7 @@ public class RoleService {
 
     public List<RoleResponse> getAll() {
 
-        return roleRepository.findAll()
-                .stream()
-                .map(roleMapper::toRoleResponse)
-                .toList();
+        return roleRepository.findAll().stream().map(roleMapper::toRoleResponse).toList();
     }
 
     public void delete(String role) {

@@ -94,9 +94,37 @@
 			<groupId>com.fasterxml.jackson.datatype</groupId>
 			<artifactId>jackson-datatype-jsr310</artifactId>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.testcontainers/junit-jupiter -->
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<version>1.20.4</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.testcontainers/mysql -->
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>mysql</artifactId>
+			<version>1.20.4</version>
+			<scope>test</scope>
+		</dependency>
 
 
 	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.testcontainers</groupId>
+				<artifactId>testcontainers-bom</artifactId>
+				<version>1.20.4</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 
 	<build>
 		<plugins>
@@ -130,10 +158,29 @@
 						<exclude>com/cancelo/identityservice/configuration/**</exclude>
 					</excludes>
 				</configuration>
-
+			</plugin>
+			<plugin>
+				<groupId>com.diffplug.spotless</groupId>
+				<artifactId>spotless-maven-plugin</artifactId>
+				<version>2.44.2</version>
+				<configuration>
+					<java>
+						<removeUnusedImports />
+						<toggleOffOn/>
+						<trimTrailingWhitespace/>
+						<endWithNewline/>
+						<indent>
+							<tabs>true</tabs>
+							<spacesPerTab>4</spacesPerTab>
+						</indent>
+						<palantirJavaFormat/>
+						<importOrder>
+							<!-- Specify either order or file, but not both -->
+							<order>java,jakarta,org,com,com.diffplug,</order>
+						</importOrder>
+					</java>
+				</configuration>
 			</plugin>
 		</plugins>
-
 	</build>
-
 </project>

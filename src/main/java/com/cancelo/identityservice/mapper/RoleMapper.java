@@ -1,11 +1,11 @@
 package com.cancelo.identityservice.mapper;
 
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import com.cancelo.identityservice.dto.request.RoleRequest;
 import com.cancelo.identityservice.dto.response.RoleResponse;
 import com.cancelo.identityservice.entity.Role;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface RoleMapper {
@@ -13,6 +13,4 @@ public interface RoleMapper {
     Role toRole(RoleRequest request);
 
     RoleResponse toRoleResponse(Role role);
-
-
 }

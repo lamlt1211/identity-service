@@ -1,15 +1,16 @@
 package com.cancelo.identityservice.dto.request;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import com.cancelo.identityservice.validator.DobConstraint;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDate;
-import java.util.List;
 
 @Data
 @Builder
@@ -23,5 +24,6 @@ public class UserUpdateRequest {
 
     @DobConstraint(min = 16, message = "INVALID_DOB")
     LocalDate dob;
+
     List<String> roles;
 }

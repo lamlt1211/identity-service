@@ -1,15 +1,9 @@
 package com.cancelo.identityservice.controller;
 
-import com.cancelo.identityservice.dto.request.ApiResponse;
-import com.cancelo.identityservice.dto.request.UserCreationRequest;
-import com.cancelo.identityservice.dto.request.UserUpdateRequest;
-import com.cancelo.identityservice.dto.response.UserResponse;
-import com.cancelo.identityservice.service.UserService;
+import java.util.List;
+
 import jakarta.validation.Valid;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,8 +14,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.cancelo.identityservice.dto.request.ApiResponse;
+import com.cancelo.identityservice.dto.request.UserCreationRequest;
+import com.cancelo.identityservice.dto.request.UserUpdateRequest;
+import com.cancelo.identityservice.dto.response.UserResponse;
+import com.cancelo.identityservice.service.UserService;
 
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/users")
@@ -44,7 +46,6 @@ public class UserController {
         var authencatication = SecurityContextHolder.getContext().getAuthentication();
         log.info("Username: {}", authencatication.getName());
         authencatication.getAuthorities().forEach(grantedAuthority -> log.info(grantedAuthority.getAuthority()));
-
 
         return ApiResponse.<List<UserResponse>>builder()
                 .result(userService.getUsers())

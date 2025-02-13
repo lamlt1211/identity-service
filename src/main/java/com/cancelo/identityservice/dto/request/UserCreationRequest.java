@@ -1,15 +1,17 @@
 package com.cancelo.identityservice.dto.request;
 
-import com.cancelo.identityservice.validator.DobConstraint;
+import java.time.LocalDate;
+
 import jakarta.validation.constraints.Size;
+
+import com.cancelo.identityservice.validator.DobConstraint;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -22,6 +24,7 @@ public class UserCreationRequest {
 
     @Size(min = 8, message = "INVALID_PASSWORD")
     String password;
+
     String firstName;
     String lastName;
 

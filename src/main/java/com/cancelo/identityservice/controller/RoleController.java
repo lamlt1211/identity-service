@@ -1,13 +1,7 @@
 package com.cancelo.identityservice.controller;
 
-import com.cancelo.identityservice.dto.request.ApiResponse;
-import com.cancelo.identityservice.dto.request.RoleRequest;
-import com.cancelo.identityservice.dto.response.RoleResponse;
-import com.cancelo.identityservice.service.RoleService;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,7 +10,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.cancelo.identityservice.dto.request.ApiResponse;
+import com.cancelo.identityservice.dto.request.RoleRequest;
+import com.cancelo.identityservice.dto.response.RoleResponse;
+import com.cancelo.identityservice.service.RoleService;
+
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/roles")
