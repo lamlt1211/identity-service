@@ -3,6 +3,9 @@ package com.cancelo.identityservice.service;
 import java.util.HashSet;
 import java.util.List;
 
+import com.cancelo.identityservice.constant.PredefinedRole;
+import com.cancelo.identityservice.entity.Role;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,7 +16,6 @@ import com.cancelo.identityservice.dto.request.UserCreationRequest;
 import com.cancelo.identityservice.dto.request.UserUpdateRequest;
 import com.cancelo.identityservice.dto.response.UserResponse;
 import com.cancelo.identityservice.entity.User;
-import com.cancelo.identityservice.enums.Role;
 import com.cancelo.identityservice.exception.AppException;
 import com.cancelo.identityservice.exception.ErrorCode;
 import com.cancelo.identityservice.mapper.UserMapper;
@@ -39,18 +41,20 @@ public class UserService {
     RoleRepository roleRepository;
 
     public UserResponse createUser(UserCreationRequest request) {
-        log.info("Service: Create User");
-        // kiem tra user co ton tai hay khong
-        if (userRepository.existsByUsername(request.getUsername())) throw new AppException(ErrorCode.USER_EXISTED);
-
         User user = userMapper.toUser(request); // map mot lan, khong can map tay tung dong` mot
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+        HashSet<Role> roles = new HashSet<>();
+        roleRepository.findById(PredefinedRole.USER_ROLE).ifPresent(roles::add);
 
-        HashSet<String> roles = new HashSet<>();
-        roles.add(Role.USER.name());
-        // user.setRoles(roles);
+        user.setRoles(roles);
 
-        return userMapper.toUserResponse(userRepository.save(user));
+        try {
+            user = userRepository.save(user);
+        } catch (DataIntegrityViolationException exception) {
+            throw new AppException(ErrorCode.USER_EXISTED);
+        }
+
+        return userMapper.toUserResponse(user);
     }
 
     public UserResponse getMyInfo() {
@@ -62,6 +66,7 @@ public class UserService {
         return userMapper.toUserResponse(user);
     }
 
+    @PostAuthorize("returnObject.username == authentication.name")
     public UserResponse updateUser(String userId, UserUpdateRequest request) {
         User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
@@ -73,21 +78,19 @@ public class UserService {
         return userMapper.toUserResponse(userRepository.save(user));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteUser(String userId) {
-
         userRepository.deleteById(userId);
     }
 
-    // @PreAuthorize("hasRole('ADMIN')")
-    @PreAuthorize("hasAuthority('APPROVE_POST')")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<UserResponse> getUsers() {
         log.info("In method get Users");
         return userRepository.findAll().stream().map(userMapper::toUserResponse).toList();
     }
 
-    @PostAuthorize("returnObject.username == authentication.name")
+    @PreAuthorize("hasRole('ADMIN')")
     public UserResponse getUser(String id) {
-        log.info("In method get User by Id");
         return userMapper.toUserResponse(
                 userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED)));
     }
